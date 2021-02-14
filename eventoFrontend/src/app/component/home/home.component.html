@@ -1,0 +1,65 @@
+<app-navbar></app-navbar>
+
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Naziv </th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+        <!-- Event start Column -->
+        <ng-container matColumnDef="startTime">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Početak </th>
+            <td mat-cell *matCellDef="let element"> {{element.startTime | date:'dd. MMM, yyyy. @ HH:mm'}} </td>
+        </ng-container>
+
+        <!-- Event end Column -->
+        <ng-container matColumnDef="endTime">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Kraj </th>
+            <td mat-cell *matCellDef="let element"> {{element.endTime | date:'dd. MMM, yyyy. @ HH:mm'}} </td>
+        </ng-container>
+
+        <!-- Enterance Column -->
+        <ng-container matColumnDef="freeEntrance">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Ulaz slobodan </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.freeEntrance | yesNo}} </td>
+        </ng-container>
+
+        <!-- City Column -->
+        <ng-container matColumnDef="city">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Grad </th>
+            <td mat-cell *matCellDef="let element"> {{element.city}} </td>
+        </ng-container>
+
+        <!-- City size Column -->
+        <ng-container matColumnDef="citySize">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Veličina grada </th>
+            <td mat-cell *matCellDef="let element"> {{element.citySize}} </td>
+        </ng-container>
+
+        <!-- County Column -->
+        <ng-container matColumnDef="county">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Županija </th>
+            <td mat-cell *matCellDef="let element"> {{element.county}} </td>
+        </ng-container>
+
+        <!-- Region Column -->
+        <ng-container matColumnDef="region">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Regija </th>
+            <td mat-cell *matCellDef="let element"> {{element.region}} </td>
+        </ng-container>
+
+        <!-- Active City Column -->
+        <ng-container matColumnDef="cityActive">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Grad aktivan </th>
+            <td mat-cell *matCellDef="let element"> {{element.cityActive | yesNo}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+</div>

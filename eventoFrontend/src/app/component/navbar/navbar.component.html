@@ -1,0 +1,129 @@
+<div class="mat-elevation-z8">
+
+  <form class="form-group" #searchEvents="ngForm" [formGroup]="searchEventForm">
+
+    <mat-toolbar color="primary">
+
+      <mat-toolbar-row>
+        <button class="buttons" type="button" (click)="clearForm()" mat-raised-button color="accent">Očisti formu</button>
+      </mat-toolbar-row>
+
+      <mat-toolbar-row class="firstRow">
+        <mat-form-field class="filterGroup">
+          <mat-label>Regija</mat-label>
+          <mat-select multiple (selectionChange)="onChangeRegion($event.value)"
+            [formControl]="searchEventForm.controls.regions$">
+            <mat-option *ngFor="let region of regions$ | async" [value]="region">
+              {{region}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="filterGroup">
+          <mat-label>Županija</mat-label>
+          <mat-select multiple (selectionChange)="onChangeCounty($event.value)"
+            [formControl]="searchEventForm.controls.county$">
+            <mat-option *ngFor="let county of county$ | async" [value]="county">
+              {{county}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="filterGroup">
+          <mat-label>Grad</mat-label>
+          <mat-select multiple [formControl]="searchEventForm.controls.city$">
+            <mat-optgroup *ngFor="let sizeGroup of city$ | async" [label]="sizeGroup.sizeValue">
+              <mat-option *ngFor="let city of sizeGroup | keyvalue" [value]="sizeGroup.cityName">
+                {{sizeGroup.cityName}}
+              </mat-option>
+            </mat-optgroup>
+                                  
+            
+
+
+
+
+           <!--  <mat-optgroup *ngFor="let sizeGroup of city$ | async" [label]="sizeGroup.sizeValue">
+              <mat-select>
+                <mat-optgroup *ngIf="sizeGroup.sizeValue==='VELIK'">
+                  
+                <mat-option *ngFor="let city of sizeGroup | keyvalue" [value]="sizeGroup.cityName">
+                  {{sizeGroup.cityName}}
+                </mat-option>
+
+                </mat-optgroup>
+
+              </mat-select>
+              
+            </mat-optgroup> -->
+
+
+            <!-- <mat-optgroup label="MALI">
+              <mat-option *ngFor="let city of city$ |async" [value]="city.cityName">
+                <li *ngIf="city.sizeValue==='MALI'">{{city.cityName}}</li>         
+              </mat-option>
+            </mat-optgroup>
+            <mat-optgroup label="SREDNJI">
+              <mat-option *ngFor="let city of city$ |async" [value]="city.cityName">
+                <li *ngIf="city.sizeValue=='SREDNJI' else null">{{city.cityName}}</li>         
+              </mat-option>
+            </mat-optgroup>
+            <mat-optgroup label="VELIKI">
+              <mat-option *ngFor="let city of city$ |async"  [value]="city.cityName">
+                <li *ngIf="city.sizeValue==='VELIK'">{{city.cityName}}</li>                
+              </mat-option>
+            </mat-optgroup> -->
+            <!-- <mat-optgroup *ngFor="let sizeGroup of city$ | async" [label]="sizeGroup.sizeValue">
+              <mat-option *ngFor="let city of sizeGroup.sizeValue | async" [value]="sizeGroup.cityName">
+                {{sizeGroup.cityName}}
+              </mat-option>
+                                   <mat-option *ngFor="let city of sizeGroup  | async" [value]="city.cityName" >
+                      {{city.cityName}}
+                    </mat-option> 
+            </mat-optgroup> -->
+          </mat-select>
+        </mat-form-field>
+      </mat-toolbar-row>
+
+      <mat-toolbar-row class="secondRow">
+        <input class="filterEvent" type="text" placeholder="Naziv događaja" [formControl]="searchEventForm.controls.eventName"
+          [matAutocomplete]="auto1">
+          <mat-icon style="margin-left: -80px;" matSuffix>search</mat-icon>
+        <mat-autocomplete #auto1="matAutocomplete">
+          <mat-option *ngFor="let event of eventName | async" [value]="event">
+            {{event}}
+          </mat-option>
+          
+        </mat-autocomplete>
+
+        <mat-form-field class="filterDate">
+          <mat-label>Slobodan ulaz</mat-label>
+          <mat-select [formControl]="searchEventForm.controls.entrance">
+            <mat-option>- -</mat-option>
+            <mat-option value="false">NE</mat-option>
+            <mat-option value="true">DA</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="filterDate">
+          <mat-label>Datum početka</mat-label>
+          <input matInput [ngxMatDatetimePicker]="picker1" [formControl]="searchEventForm.controls.eventStartDate">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <ngx-mat-datetime-picker #picker1></ngx-mat-datetime-picker>
+        </mat-form-field>
+
+        <mat-form-field class="filterDate">
+          <mat-label>Datum kraja</mat-label>
+          <input matInput [ngxMatDatetimePicker]="picker2" [formControl]="searchEventForm.controls.eventEndDate">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <ngx-mat-datetime-picker #picker2></ngx-mat-datetime-picker>
+        </mat-form-field>
+      </mat-toolbar-row>
+
+      <mat-toolbar-row>
+        <button class="buttons" mat-raised-button color="accent" type="button" (click)="submit()">Pretraži događaje</button>
+      </mat-toolbar-row>
+
+    </mat-toolbar>
+  </form>
+</div>

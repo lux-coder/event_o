@@ -1,0 +1,10 @@
+.login{
+    margin-left: auto;
+    margin-right: 5%;
+    color:teal;
+}
+
+a {
+    display: inline-flex;
+    color: inherit;
+}

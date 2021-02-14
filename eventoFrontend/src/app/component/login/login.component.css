@@ -1,0 +1,25 @@
+.container-fluid {
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+}
+
+.box {
+    border: #424242;
+    border-style: solid;
+    padding: 15px;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    padding: 10px;
+}
+
+.btn {
+    float: right; 
+    margin-top: 15px;
+    background-color: #008080;
+    border-color: #343a40;
+}

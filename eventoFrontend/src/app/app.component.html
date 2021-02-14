@@ -1,0 +1,16 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">  
+  <a class="navbar-brand text-light" href="#">EventO app is running!</a>
+
+  <span class="login" style="display:inline-block;">    
+      <a routerLink="/login">Login
+        <mat-icon>login</mat-icon>
+      </a>
+  </span>
+  <span>
+    <a *ngIf="loginService.isUserLoggedIn()" routerLink="/logout" class="nav-link">LogOut</a>
+  </span>
+</nav>
+
+<div class="container-fluid pt-3">
+  <router-outlet></router-outlet>
+</div>

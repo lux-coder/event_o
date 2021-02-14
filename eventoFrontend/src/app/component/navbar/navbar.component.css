@@ -1,0 +1,61 @@
+.mat-toolbar.mat-primary {
+    background: #ab1e5b;
+}
+
+.ng-value-label {
+    color: cyan;
+}
+
+.firstRow {
+    justify-content: space-around;
+}
+
+.secondRow {
+    margin-top: 20px; 
+    padding-bottom: 10px;
+    justify-content: space-around;
+}
+
+
+.break {
+    flex-basis: 100%;
+    height: 0;
+  }
+
+
+.buttons {
+    width: inherit;
+}
+
+
+.filterGroup {
+    width: 30%;    
+}
+
+.filterElement {
+    width: 54%;
+}
+
+.filterDate {
+    width: 10%;
+}
+
+.filterEvent {
+    width: 54%;
+    background: #ab1e5b;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+input, select, textarea{
+    color: #ffffff;
+}
+
+textarea:focus, input:focus {
+    color: #ffffff;
+}
+
+.mat-form-field-infix {
+    color: white;
+}
