@@ -1,0 +1,3 @@
+com\example\evento\EventOrganizerApplicationTests.class
+com\example\evento\persistance\repository\EventRepositoryIntegrationTest.class
+com\example\evento\web\controller\EventsControllerIntegrationTest.class
