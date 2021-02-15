@@ -19,6 +19,7 @@ C:\Users\lux-coder\Projects\event_organizer\event_o\evento\src\main\java\com\exa
 C:\Users\lux-coder\Projects\event_organizer\event_o\evento\src\main\java\com\example\evento\persistance\converter\EventConverter.java
 C:\Users\lux-coder\Projects\event_organizer\event_o\evento\src\main\java\com\example\evento\controllers\EventsController.java
 C:\Users\lux-coder\Projects\event_organizer\event_o\evento\src\main\java\com\example\evento\persistance\model\dto\EventRequest.java
+C:\Users\lux-coder\Projects\event_organizer\event_o\evento\src\main\java\com\example\evento\persistance\model\dto\OrganizationDTO.java
 C:\Users\lux-coder\Projects\event_organizer\event_o\evento\src\main\java\com\example\evento\persistance\repository\OrganizationalTypeRepository.java
 C:\Users\lux-coder\Projects\event_organizer\event_o\evento\src\main\java\com\example\evento\services\CitySizeService.java
 C:\Users\lux-coder\Projects\event_organizer\event_o\evento\src\main\java\com\example\evento\EventOrganizerApplication.java

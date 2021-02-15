@@ -1,0 +1,52 @@
+.container {
+    background-color: #424242;
+}
+
+.addWrapper {
+    margin-top: 15px;
+    padding-top: 15px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.inputData {
+    color: white;
+    width: 30%;
+}
+
+.inputData2 {
+    color: white;
+    width: 40%;
+}
+
+.inputData3 {
+    color: white;
+    width: 25%;
+}
+
+.inputData4 {
+    color: white;
+    width: 30%;
+}
+
+.tableData {
+    width: 100%;
+}
+
+.addButton {
+    background-color: #008080;
+}
+
+.deleteButton {    
+    background-color: #c2185b;
+    margin-left: 10px;
+}
+
+.toggle {
+    color: white;    
+}
+
+.filterDate {
+    width: 13.1%;
+    color: white;
+}

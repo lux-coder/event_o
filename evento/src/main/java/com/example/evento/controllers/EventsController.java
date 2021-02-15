@@ -46,7 +46,7 @@ public class EventsController {
         return eventConverter.convertEvent();
     }
 
-    @PostMapping
+    @PostMapping(value = "/save")
     public void create(@RequestBody Event event) {
         LOGGER.info("In eventsController, create with event: {}", event);
         eventService.save(event);

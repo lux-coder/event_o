@@ -88,7 +88,7 @@ export class NavbarComponent implements OnInit {
   }
 
   submit() {
-    console.log("submited");
+    console.log("submited");    
     this.unitsService.searchEvents(this.searchEventForm.value).subscribe(res => {
       this.unitsService.setData(res);            
     });

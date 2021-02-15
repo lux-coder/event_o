@@ -92,8 +92,7 @@
         <mat-autocomplete #auto1="matAutocomplete">
           <mat-option *ngFor="let event of eventName | async" [value]="event">
             {{event}}
-          </mat-option>
-          
+          </mat-option>          
         </mat-autocomplete>
 
         <mat-form-field class="filterDate">

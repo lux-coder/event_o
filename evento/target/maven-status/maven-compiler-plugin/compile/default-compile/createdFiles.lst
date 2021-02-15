@@ -20,6 +20,7 @@ com\example\evento\controllers\OrganizationsController.class
 com\example\evento\services\EventService.class
 com\example\evento\services\impl\OrganizationalUnitServiceImpl.class
 com\example\evento\persistance\model\dto\EventDTO.class
+com\example\evento\persistance\model\dto\OrganizationDTO.class
 com\example\evento\persistance\converter\EventConverter.class
 com\example\evento\persistance\repository\OrganizationalTypeRepository.class
 com\example\evento\services\OrganizationalUnitService.class

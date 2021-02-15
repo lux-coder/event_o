@@ -29,4 +29,9 @@ public class CitySizeServiceImpl implements CitySizeService {
         LOGGER.info("In CitySizeService, findByCityId");
         return citySizeRepository.findByCityId(id);
     }
+
+    public void saveCitySize(CitySize citySize) {
+        LOGGER.info("In CitySizeService, saveCitySize: {}", citySize);
+        citySizeRepository.save(citySize);
+    }
 }

@@ -8,7 +8,7 @@ public class CityDTO {
     private Integer cityId;
     private String cityName;
     private Integer orUnitId;
-
+    private String organizationUnit;
     private String sizeValue;
     private Boolean active;
 

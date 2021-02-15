@@ -1,6 +1,7 @@
 package com.example.evento.persistance.repository;
 
 import com.example.evento.persistance.model.OrganizationalUnit;
+import com.example.evento.persistance.model.dto.OrganizationDTO;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +18,9 @@ public interface OrganizationalUnitRepository extends CrudRepository<Organizatio
             "select or_unit_id from or_unit where unit_id = :countyId)", nativeQuery = true)
     String getRegionName(@Param("countyId") Long countyId);
 
+    @Query(value = "select unit_name from or_unit where unit_id = :countyId", nativeQuery = true)
+    String getCountyName(@Param("countyId") Long countyId);
+
     @Query(value = "select * from or_unit inner join or_type ON or_unit.unit_id = or_type.unit_id where or_type.type_name = 'REGIJA'", nativeQuery = true)
     List<OrganizationalUnit> getRegions();
 
@@ -28,5 +32,8 @@ public interface OrganizationalUnitRepository extends CrudRepository<Organizatio
             "(select or_unit_id from or_unit " +
             "where unit_name in (:requestedRegions) )", nativeQuery = true)
     List<OrganizationalUnit> getCounties(@Param("requestedRegions") String[] requestedRegions);
+
+    @Query(value = "select unit_id from or_unit where unit_name = :county", nativeQuery = true)
+    Long getCountyId(@Param("county") String county);
 
 }

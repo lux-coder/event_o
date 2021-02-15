@@ -36,7 +36,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event save(Event event) {
-        LOGGER.info("In event service, save");
+        LOGGER.info("In event service, save: {}", event);
         return eventRepository.save(event);
     }
 

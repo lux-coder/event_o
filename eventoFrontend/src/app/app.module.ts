@@ -18,13 +18,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { YesNoPipe } from './service/yes-no.pipe';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule, MatInputModule, MatNativeDateModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatNativeDateModule, MatSlideToggleModule } from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 import { NgxMatDateFormats, NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule, 
           NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
 import { LoginComponent } from './component/login/login.component';
 import { LogoutComponent } from './component/logout/logout.component';
+import { AddComponent } from './component/add/add.component';
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
   parse: {
@@ -45,7 +46,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     NavbarComponent,
     YesNoPipe,
     LoginComponent,
-    LogoutComponent
+    LogoutComponent,
+    AddComponent
   ],
   imports: [
     BrowserModule,
@@ -63,6 +65,7 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSlideToggleModule,
     NgxMatMomentModule,
     NgxMatDatetimePickerModule, 
     NgxMatNativeDateModule, 
@@ -70,7 +73,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     
   ],
   providers: [EventsService, NgSelectConfig, ɵs],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  
 })
 export class AppModule { }
 

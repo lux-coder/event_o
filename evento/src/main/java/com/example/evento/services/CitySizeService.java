@@ -9,4 +9,6 @@ public interface CitySizeService {
     Optional<CitySize> findById(Long id);
 
     Optional<CitySize> findByCityId(Long id);
+
+    void saveCitySize(CitySize citySize);
 }

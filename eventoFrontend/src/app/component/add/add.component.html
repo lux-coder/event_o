@@ -1,0 +1,322 @@
+<div class="container">
+
+    <div>
+        <form [formGroup]="addEventForm">
+
+            <div class="addWrapper">
+
+                <mat-form-field style="width: 10%;">
+                    <mat-label>Grad</mat-label>
+                    <mat-select [formControl]="addEventForm.controls.cities$">
+                        <mat-option *ngFor="let city of cities$ | async" [value]="city.cityName">
+                            {{city.cityName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="inputData4">
+                    <input matInput type="text" [formControl]="addEventForm.controls.event"
+                        placeholder="Naziv događaja">
+                </mat-form-field>
+
+                <mat-form-field class="filterDate">
+                    <mat-label>Datum početka</mat-label>
+                    <input matInput [ngxMatDatetimePicker]="picker3" [formControl]="addEventForm.controls.eventStartDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker #picker3></ngx-mat-datetime-picker>
+                </mat-form-field>
+
+                <mat-form-field class="filterDate">
+                    <mat-label>Datum kraja</mat-label>
+                    <input matInput [ngxMatDatetimePicker]="picker4" [formControl]="addEventForm.controls.eventEndDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker #picker4></ngx-mat-datetime-picker>
+                </mat-form-field>
+
+                <mat-form-field style="width: 14%; margin-top: -5px;">
+                    <mat-slide-toggle [formControl]="addEventForm.controls.freeEntrance" class="toggle" [checked]=checked>Slobodan ulaz
+                    </mat-slide-toggle>
+                    <textarea matInput hidden></textarea>
+                </mat-form-field>
+
+                <button mat-raised-button class="addButton" type="button" (click)="submitEvent()">Spremi</button>
+
+            </div>
+
+            <table mat-table [dataSource]="dataSourceEvents" matSort class="tableData">
+
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 30%;"> Naziv događaja </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="startTime">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%;"> Početak </th>
+                    <td mat-cell *matCellDef="let element"> {{element.startTime | date:'dd. MMM, yyyy. @ HH:mm'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="endTime">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%;"> Kraj </th>
+                    <td mat-cell *matCellDef="let element"> {{element.endTime | date:'dd. MMM, yyyy. @ HH:mm'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="freeEntrance">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 9%;"> Besplatan ulaz </th>
+                    <td mat-cell *matCellDef="let element"> {{element.freeEntrance | yesNo}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="city">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%;"> Grad </th>
+                    <td mat-cell *matCellDef="let element"> {{element.city}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-raised-button color="accent" data-toggle="modal">Uredi</button>
+                        <button mat-raised-button class="deleteButton">Izbriši</button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsEvents"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsEvents;"></tr>
+
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+
+        </form>
+    </div>
+
+    <div class="container" style="height: 50px; background-color: white; width: 130%; margin-left: -15px;"></div>
+
+    <div>
+        <form [formGroup]="addCityForm">
+
+            <div class="addWrapper">
+
+                <mat-form-field style="width: 20%;">
+                    <mat-label>Županija</mat-label>
+                    <mat-select [formControl]="addCityForm.controls.counties$">
+                        <mat-option *ngFor="let county of counties$ | async" [value]="county">
+                            {{county}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="inputData2">
+                    <input matInput type="text" [formControl]="addCityForm.controls.city" placeholder="Naziv grada">
+                </mat-form-field>
+
+                <mat-form-field style="width: 10%;">
+                    <mat-label>Veličina</mat-label>
+                    <mat-select [formControl]="addCityForm.controls.size">
+                        <mat-option>- -</mat-option>
+                        <mat-option *ngFor="let size of sizeValues" [value]="size.viewValue">
+                            {{size.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field style="width: 12%; margin-top: -5px;">
+                    <mat-slide-toggle [formControl]="addCityForm.controls.active" class="toggle">Grad aktivan
+                    </mat-slide-toggle>
+                    <textarea matInput hidden></textarea>
+                </mat-form-field>
+
+                <button mat-raised-button class="addButton" type="button" (click)="submitCity()">Spremi</button>
+
+            </div>
+
+            <table mat-table [dataSource]="dataSourceCities" matSort class="tableData">
+
+                <ng-container matColumnDef="cityId">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.cityId }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="cityName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 30%;"> Naziv grada </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.cityName }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="sizeValue">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%;"> Veličina </th>
+                    <td mat-cell *matCellDef="let element"> {{element.sizeValue}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="active">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 9%;"> Aktivan </th>
+                    <td mat-cell *matCellDef="let element"> {{element.active | yesNo}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="organizationUnit">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 25%;"> Županija </th>
+                    <td mat-cell *matCellDef="let element"> {{element.organizationUnit}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-raised-button color="accent" data-toggle="modal">Uredi</button>
+                        <button mat-raised-button class="deleteButton">Izbriši</button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsCities"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsCities;"></tr>
+
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+
+        </form>
+    </div>
+
+    <div class="container" style="height: 50px; background-color: white; width: 130%; margin-left: -15px;"></div>
+
+    <div>
+        <form [formGroup]="addCountyForm">
+
+            <div class="addWrapper">
+
+                <mat-form-field style="width: 10%;">
+                    <mat-label>Tip jedinice</mat-label>
+                    <mat-select [formControl]="addRegionForm.controls.regionType">
+                        <mat-option *ngFor="let region of regionTypes" [value]="region.value"
+                            [disabled]="region.viewValue === 'REGIJA'">
+                            {{region.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field style="width: 15%;">
+                    <mat-label>Regija</mat-label>
+                    <mat-select [formControl]="addCountyForm.controls.regions$">
+                        <mat-option *ngFor="let region of regions$ | async" [value]="region">
+                            {{region}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="inputData3">
+                    <input matInput type="text" [formControl]="addCountyForm.controls.county"
+                        placeholder="Naziv županije">
+                </mat-form-field>
+
+                <mat-form-field class="inputData4">
+                    <input matInput type="text" [formControl]="addCountyForm.controls.description" placeholder="Opis">
+                </mat-form-field>
+
+                <button mat-raised-button class="addButton" type="button" (click)="submitCounty()">Spremi</button>
+
+            </div>
+
+            <table mat-table [dataSource]="dataSourceCounties" matSort class="tableData">
+
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 25%;"> Naziv županije </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 28%;"> Opis </th>
+                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="organizationalUnit">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 26%;"> Regija </th>
+                    <td mat-cell *matCellDef="let element"> {{element.organizationalUnit}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-raised-button color="accent" data-toggle="modal">Uredi</button>
+                        <button mat-raised-button class="deleteButton">Izbriši</button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsCounties"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsCounties;"></tr>
+
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+
+        </form>
+    </div>
+
+    <div class="container" style="height: 50px; background-color: white; width: 130%; margin-left: -15px;"></div>
+
+    <div>
+        <form [formGroup]="addRegionForm">
+
+            <div class="addWrapper">
+
+                <mat-form-field>
+                    <mat-label>Tip jedinice</mat-label>
+                    <mat-select [formControl]="addRegionForm.controls.regionType">
+                        <mat-option *ngFor="let region of regionTypes" [value]="region.value"
+                            [disabled]="region.viewValue === 'ŽUPANIJA'">
+                            {{region.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="inputData">
+                    <input matInput type="text" [formControl]="addRegionForm.controls.region"
+                        placeholder="Naziv regije">
+                </mat-form-field>
+
+                <mat-form-field class="inputData2">
+                    <input matInput type="text" [formControl]="addRegionForm.controls.description" placeholder="Opis">
+                </mat-form-field>
+
+                <button mat-raised-button class="addButton" type="button" (click)="submitRegion()">Spremi</button>
+
+            </div>
+
+            <table mat-table [dataSource]="dataSourceRegions" matSort class="tableData">
+
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 37%;"> Naziv regije</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 42%;"> Opis </th>
+                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-raised-button color="accent" data-toggle="modal">Uredi</button>
+                        <button mat-raised-button class="deleteButton">Izbriši</button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsRegions"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsRegions;"></tr>
+
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+
+        </form>
+    </div>
+
+    <div class="container" style="height: 50px; background-color: white; width: 130%; margin-left: -15px;"></div>
+
+</div>

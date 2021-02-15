@@ -1,6 +1,7 @@
 package com.example.evento.services.impl;
 
 import com.example.evento.persistance.model.OrganizationalUnit;
+import com.example.evento.persistance.model.dto.OrganizationDTO;
 import com.example.evento.persistance.repository.OrganizationalUnitRepository;
 import com.example.evento.services.OrganizationalUnitService;
 import org.slf4j.Logger;
@@ -39,6 +40,23 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
     @Override
     public List<OrganizationalUnit> getAllCounties() {
         return organizationalUnitRepository.getAllCounties();
+    }
+
+    @Override
+    public List<OrganizationDTO> getCountiesFull() {
+
+        List<OrganizationDTO> organizationDTOS = new ArrayList<>();
+        List<OrganizationalUnit> units = organizationalUnitRepository.getAllCounties();
+
+        for (OrganizationalUnit u: units) {
+            OrganizationDTO organizationDTO = new OrganizationDTO();
+            organizationDTO.setId(u.getId());
+            organizationDTO.setName(u.getName());
+            organizationDTO.setDescription(u.getDescription());
+            organizationDTO.setOrganizationalUnit(organizationalUnitRepository.getRegionName(u.getOrganizationalUnit()));
+            organizationDTOS.add(organizationDTO);
+        }
+        return organizationDTOS;
     }
 
     @Override
