@@ -8,6 +8,8 @@ import { County } from 'src/app/model/county';
 import { Events } from 'src/app/model/events';
 import { Region } from 'src/app/model/region';
 import { AddService } from 'src/app/service/add.service';
+import { DeleteService } from 'src/app/service/delete.service';
+import { EditService } from 'src/app/service/edit.service';
 import { UnitsService } from 'src/app/service/units.service';
 
 interface RegionType {
@@ -90,7 +92,7 @@ export class AddComponent implements OnInit {
   });
 
   addCountyForm = new FormGroup({
-    regionType: new FormControl('ŽUPANIJA',Validators.required),
+    regionType: new FormControl('ŽUPANIJA', Validators.required),
     regions$: new FormControl('', Validators.required),
     county: new FormControl('', Validators.required),
     description: new FormControl()
@@ -104,14 +106,14 @@ export class AddComponent implements OnInit {
   });
 
   addEventForm = new FormGroup({
-    cities$: new FormControl('', Validators.required),
+    cities$: new FormControl('',Validators.required),
     event: new FormControl('',Validators.required),
-    eventStartDate: new FormControl(Validators.required),
+    eventStartDate: new FormControl('',Validators.required),
     eventEndDate: new FormControl(),
     freeEntrance: new FormControl(null ? true : false)
   });
 
-  constructor(private addService: AddService, private unitService: UnitsService) { }
+  constructor(private addService: AddService, private deleteService: DeleteService, private unitService: UnitsService, private editService:EditService) { }
 
   ngOnInit() {
 
@@ -120,6 +122,7 @@ export class AddComponent implements OnInit {
     this.cities$ = this.unitService.getAllCities();
 
     this.addService.getEvents().subscribe(dataEvent => {      
+      console.log(dataEvent);
       this.dataEvent = dataEvent;      
       this.dataSourceEvents = new MatTableDataSource(this.dataEvent);      
       this.dataSourceEvents.paginator = this.paginator.toArray()[0];
@@ -155,11 +158,11 @@ export class AddComponent implements OnInit {
         this.dataEvent = res;                
         this.dataSourceEvents = new MatTableDataSource(this.dataEvent);
         this.dataSourceEvents.paginator = this.paginator.toArray()[0];
-        this.dataSourceEvents.sort = this.sort.toArray()[0];        
-        this.addEventForm.reset();        
+        this.dataSourceEvents.sort = this.sort.toArray()[0];                
         Object.keys(this.addEventForm.controls).forEach(key => {
           this.addEventForm.controls[key].setErrors(null)
         });
+        this.addEventForm.reset();                
       });    
     } else {
       console.log("Form addCityForm not valid!!")
@@ -174,11 +177,12 @@ export class AddComponent implements OnInit {
         this.dataCity = res;                
         this.dataSourceCities = new MatTableDataSource(this.dataCity);
         this.dataSourceCities.paginator = this.paginator.toArray()[1];
-        this.dataSourceCities.sort = this.sort.toArray()[1];        
-        this.addCityForm.reset();        
+        this.dataSourceCities.sort = this.sort.toArray()[1];                
         Object.keys(this.addCityForm.controls).forEach(key => {
           this.addCityForm.controls[key].setErrors(null)
         });
+        this.addCityForm.reset();
+        this.cities$ = this.unitService.getAllCities();
       });    
     } else {
       console.log("Form addCityForm not valid!!")
@@ -186,18 +190,18 @@ export class AddComponent implements OnInit {
   }
 
   submitCounty() {
-    console.log("submit county");
-    console.log(this.addCountyForm.value);
+    console.log("submit county");    
     if (this.addCountyForm.valid) {
       this.addService.addCounty(this.addCountyForm.value).subscribe(res => {        
         this.dataCounty = res;                
         this.dataSourceCounties = new MatTableDataSource(this.dataCounty);
         this.dataSourceCounties.paginator = this.paginator.toArray()[2];
-        this.dataSourceCounties.sort = this.sort.toArray()[2];        
-        this.addCountyForm.reset();        
+        this.dataSourceCounties.sort = this.sort.toArray()[2];                
         Object.keys(this.addCountyForm.controls).forEach(key => {
           this.addCountyForm.controls[key].setErrors(null)
         });
+        this.addCountyForm.reset();
+        this.counties$ = this.unitService.getAllCounties();
       });    
     } else {
       console.log("Form addCountyForm not valid!!")
@@ -205,8 +209,7 @@ export class AddComponent implements OnInit {
   }
 
   submitRegion() {
-    console.log("submit region");
-    console.log(this.addRegionForm.value);
+    console.log("submit region");    
     if (this.addRegionForm.valid) {
       this.addService.addRegion(this.addRegionForm.value).subscribe(res => {        
         this.dataRegion = res;                
@@ -217,10 +220,74 @@ export class AddComponent implements OnInit {
         Object.keys(this.addRegionForm.controls).forEach(key => {
           this.addRegionForm.controls[key].setErrors(null)
         });
+        this.addRegionForm.reset();
+        this.regions$ = this.unitService.getRegions();
       });    
     } else {
       console.log("Form addRegionForm not valid!!")
     }
+  }
+
+  deleteEvent(element){    
+    this.deleteService.deleteEvent(element).subscribe(res => {
+      console.log(res);
+    })
+    this.dataSourceEvents.data = this.dataSourceEvents.data.filter(i=> i != element);
+  }
+
+  deleteCity(element){    
+    this.deleteService.deleteCity(element).subscribe(res => {
+      this.dataCity = res;                
+        this.dataSourceCities = new MatTableDataSource(this.dataCity);
+        this.dataSourceCities.paginator = this.paginator.toArray()[1];
+        this.dataSourceCities.sort = this.sort.toArray()[1];   
+    })
+    this.dataSourceCities.data = this.dataSourceCities.data.filter(i=> i != element);
+    this.cities$ = this.unitService.getAllCities();
+  }
+  
+  deleteCounty(element){    
+    this.deleteService.deleteCounty(element).subscribe(res => {
+      this.dataCounty = res;                
+        this.dataSourceCounties = new MatTableDataSource(this.dataCounty);
+        this.dataSourceCounties.paginator = this.paginator.toArray()[2];
+        this.dataSourceCounties.sort = this.sort.toArray()[2];  
+    })
+    this.dataSourceCounties.data = this.dataSourceCounties.data.filter(i=> i != element);
+    this.counties$ = this.unitService.getAllCounties();
+  }
+
+  deleteRegion(element){    
+    this.deleteService.deleteRegion(element).subscribe(res => {
+      this.dataRegion = res;                
+        this.dataSourceRegions = new MatTableDataSource(this.dataRegion);
+        this.dataSourceRegions.paginator = this.paginator.toArray()[3];
+        this.dataSourceRegions.sort = this.sort.toArray()[3]; 
+    })
+    this.dataSourceRegions.data = this.dataSourceRegions.data.filter(i=> i != element);
+    this.regions$ = this.unitService.getRegions();
+  }
+
+  editEvent(element) {
+    console.log(element);
+    this.editService.editEvent(element).subscribe(res => {
+      console.log(res);
+    });
+  }
+
+  editCity(element) {
+    this.editService.editCity(element).subscribe();    
+    this.cities$ = this.unitService.getAllCities();
+  }
+
+  editCounty(element) {
+    this.editService.editCounty(element).subscribe();    
+    this.counties$ = this.unitService.getAllCounties();
+  }
+
+  editRegion(element) {    
+    this.editService.editRegion(element).subscribe();    
+    this.regions$ = this.unitService.getRegions();
   }
 
 }

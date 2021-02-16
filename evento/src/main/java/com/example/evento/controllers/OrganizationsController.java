@@ -1,7 +1,5 @@
 package com.example.evento.controllers;
 
-import com.example.evento.persistance.model.City;
-import com.example.evento.persistance.model.CitySize;
 import com.example.evento.persistance.model.OrganizationalUnit;
 import com.example.evento.persistance.model.dto.CityDTO;
 import com.example.evento.persistance.model.dto.OrganizationDTO;
@@ -12,6 +10,8 @@ import com.example.evento.services.OrganizationalUnitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -106,5 +106,70 @@ public class OrganizationsController {
         cityDTOS.forEach(c -> LOGGER.info(c.toString()));
 
         return cityDTOS;
+    }
+
+    @PostMapping(value = "/deleteCity", consumes = "application/json;charset=UTF-8")
+    public ResponseEntity deleteCity(@RequestBody Map<String, String> requestedCity){
+        LOGGER.info("In OrganizationsController, deleteCity");
+
+        try {
+            cityService.deleteCity(requestedCity);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.info(e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/deleteCounty", consumes = "application/json;charset=UTF-8")
+    public ResponseEntity deleteCounty(@RequestBody Map<String, String> requestedCounty){
+        LOGGER.info("In OrganizationsController, deleteCounty");
+
+        try {
+            organizationalUnitService.deleteCounty(requestedCounty);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.info(e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/editRegion", consumes = "application/json;charset=UTF-8")
+    public ResponseEntity editRegion(@RequestBody Map<String, String> requestedRegion){
+        LOGGER.info("In OrganizationsController, editRegion");
+
+        try {
+            organizationalUnitService.editRegion(requestedRegion);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.info(e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/editCounty", consumes = "application/json;charset=UTF-8")
+    public ResponseEntity editCounty(@RequestBody Map<String, String> requestedCounty){
+        LOGGER.info("In OrganizationsController, editCounty");
+
+        try {
+            organizationalUnitService.editCounty(requestedCounty);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.info(e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/editCity", consumes = "application/json;charset=UTF-8")
+    public ResponseEntity editCity(@RequestBody Map<String, String> requestedCity){
+        LOGGER.info("In OrganizationsController, editCity");
+
+        try {
+            cityService.editCity(requestedCity);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.info(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

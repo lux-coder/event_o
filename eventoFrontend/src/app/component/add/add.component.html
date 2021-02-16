@@ -21,7 +21,8 @@
 
                 <mat-form-field class="filterDate">
                     <mat-label>Datum početka</mat-label>
-                    <input matInput [ngxMatDatetimePicker]="picker3" [formControl]="addEventForm.controls.eventStartDate">
+                    <input matInput [ngxMatDatetimePicker]="picker3"
+                        [formControl]="addEventForm.controls.eventStartDate">
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                     <ngx-mat-datetime-picker #picker3></ngx-mat-datetime-picker>
                 </mat-form-field>
@@ -34,7 +35,8 @@
                 </mat-form-field>
 
                 <mat-form-field style="width: 14%; margin-top: -5px;">
-                    <mat-slide-toggle [formControl]="addEventForm.controls.freeEntrance" class="toggle" [checked]=checked>Slobodan ulaz
+                    <mat-slide-toggle [formControl]="addEventForm.controls.freeEntrance" class="toggle"
+                        [checked]=checked>Slobodan ulaz
                     </mat-slide-toggle>
                     <textarea matInput hidden></textarea>
                 </mat-form-field>
@@ -47,34 +49,56 @@
 
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 30%;"> Naziv događaja </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                    <td mat-cell *matCellDef="let element">
+                        <input matInput [value]="element.name" [(ngModel)]="element.name" [ngModelOptions]="{standalone: true}">
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="startTime">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%;"> Početak </th>
-                    <td mat-cell *matCellDef="let element"> {{element.startTime | date:'dd. MMM, yyyy. @ HH:mm'}} </td>
+                    <td mat-cell *matCellDef="let element">                                                 
+                        <input matInput [value]="element.startTime | date:'dd. MMM, yyyy. @ HH:mm'" style="padding-top: 10px;"> 
+                            <input matInput  
+                                [ngxMatDatetimePicker]="picker5" [(ngModel)]="element.startTime" 
+                                [ngModelOptions]="{standalone: true}" style="display: none;">
+                        <mat-datepicker-toggle matSuffix [for]="picker5" style="margin-left: 50px;"></mat-datepicker-toggle>
+                        <ngx-mat-datetime-picker #picker5></ngx-mat-datetime-picker>
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="endTime">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%;"> Kraj </th>
-                    <td mat-cell *matCellDef="let element"> {{element.endTime | date:'dd. MMM, yyyy. @ HH:mm'}} </td>
+                    <td mat-cell *matCellDef="let element"> 
+                        <input matInput [value]="element.endTime | date:'dd. MMM, yyyy. @ HH:mm'" style="padding-top: 10px;"> 
+                        <input matInput  
+                                [ngxMatDatetimePicker]="picker6" [(ngModel)]="element.endTime" 
+                                [ngModelOptions]="{standalone: true}" style="display: none;">
+                        <mat-datepicker-toggle matSuffix [for]="picker6" style="margin-left: 50px;"></mat-datepicker-toggle>
+                        <ngx-mat-datetime-picker #picker6></ngx-mat-datetime-picker>
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="freeEntrance">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 9%;"> Besplatan ulaz </th>
-                    <td mat-cell *matCellDef="let element"> {{element.freeEntrance | yesNo}} </td>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 9%;"> Slobodan ulaz </th>
+                    <td mat-cell *matCellDef="let element" style="padding-left: 30px;">
+                        <input matInput [value]="element.freeEntrance" [ngModel]="element.freeEntrance | yesNo"
+                            (ngModelChange)="element.freeEntrance=$event" [ngModelOptions]="{standalone: true}">
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="city">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%;"> Grad </th>
-                    <td mat-cell *matCellDef="let element"> {{element.city}} </td>
+                    <td mat-cell *matCellDef="let element">
+                        <input matInput [value]="element.city" [(ngModel)]="element.city" [ngModelOptions]="{standalone: true}">                         
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="edit">
                     <th mat-header-cell *matHeaderCellDef> </th>
                     <td mat-cell *matCellDef="let element">
-                        <button mat-raised-button color="accent" data-toggle="modal">Uredi</button>
-                        <button mat-raised-button class="deleteButton">Izbriši</button>
+                        <button mat-raised-button color="accent" type="button"
+                            (click)="editEvent(element)">Uredi</button>
+                        <button mat-raised-button class="deleteButton" (click)="deleteEvent(element)">Izbriši</button>
                     </td>
                 </ng-container>
 
@@ -137,29 +161,38 @@
 
                 <ng-container matColumnDef="cityName">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 30%;"> Naziv grada </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.cityName }} </td>
+                    <td mat-cell *matCellDef="let element"> 
+                        <input matInput [value]="element.cityName" [(ngModel)]="element.cityName" [ngModelOptions]="{standalone: true}">
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="sizeValue">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15%;"> Veličina </th>
-                    <td mat-cell *matCellDef="let element"> {{element.sizeValue}} </td>
+                    <td mat-cell *matCellDef="let element">                         
+                        <input matInput [value]="element.sizeValue" [(ngModel)]="element.sizeValue" [ngModelOptions]="{standalone: true}">
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="active">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 9%;"> Aktivan </th>
-                    <td mat-cell *matCellDef="let element"> {{element.active | yesNo}} </td>
+                    <td mat-cell *matCellDef="let element" style="padding-left: 15px;"> 
+                        <input matInput [value]="element.active" [ngModel]="element.active | yesNo" (ngModelChange)="element.active=$event"
+                        [ngModelOptions]="{standalone: true}">
+                        </td>
                 </ng-container>
 
                 <ng-container matColumnDef="organizationUnit">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 25%;"> Županija </th>
-                    <td mat-cell *matCellDef="let element"> {{element.organizationUnit}} </td>
+                    <td mat-cell *matCellDef="let element"> 
+                        <input matInput [value]="element.organizationUnit" [(ngModel)]="element.organizationUnit" [ngModelOptions]="{standalone: true}">
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="edit">
                     <th mat-header-cell *matHeaderCellDef> </th>
                     <td mat-cell *matCellDef="let element">
-                        <button mat-raised-button color="accent" data-toggle="modal">Uredi</button>
-                        <button mat-raised-button class="deleteButton">Izbriši</button>
+                        <button mat-raised-button color="accent" type="button" (click)="editCity(element)" >Uredi</button>
+                        <button mat-raised-button class="deleteButton" (click)="deleteCity(element)">Izbriši</button>
                     </td>
                 </ng-container>
 
@@ -208,7 +241,7 @@
                     <input matInput type="text" [formControl]="addCountyForm.controls.description" placeholder="Opis">
                 </mat-form-field>
 
-                <button mat-raised-button class="addButton" type="submit" >Spremi</button>
+                <button mat-raised-button class="addButton" type="submit">Spremi</button>
 
             </div>
 
@@ -221,24 +254,30 @@
 
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 25%;"> Naziv županije </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                    <td mat-cell *matCellDef="let element"> 
+                        <input matInput [value]="element.name" [(ngModel)]="element.name" [ngModelOptions]="{standalone: true}">
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="description">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 28%;"> Opis </th>
-                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                    <td mat-cell *matCellDef="let element"> 
+                        <input matInput [value]="element.description" [(ngModel)]="element.description" [ngModelOptions]="{standalone: true}">
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="organizationalUnit">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 26%;"> Regija </th>
-                    <td mat-cell *matCellDef="let element"> {{element.organizationalUnit}} </td>
+                    <td mat-cell *matCellDef="let element"> 
+                        <input matInput [value]="element.organizationalUnit" [(ngModel)]="element.organizationalUnit" [ngModelOptions]="{standalone: true}">
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="edit">
                     <th mat-header-cell *matHeaderCellDef> </th>
                     <td mat-cell *matCellDef="let element">
-                        <button mat-raised-button color="accent" data-toggle="modal">Uredi</button>
-                        <button mat-raised-button class="deleteButton">Izbriši</button>
+                        <button mat-raised-button color="accent" type="button" (click)="editCounty(element  )">Uredi</button>
+                        <button mat-raised-button class="deleteButton" (click)="deleteCounty(element)">Izbriši</button>
                     </td>
                 </ng-container>
 
@@ -291,19 +330,23 @@
 
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 37%;"> Naziv regije</th>
-                    <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                    <td mat-cell *matCellDef="let element"> 
+                        <input matInput [value]="element.name" [(ngModel)]="element.name" [ngModelOptions]="{standalone: true}">
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="description">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 42%;"> Opis </th>
-                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                    <td mat-cell *matCellDef="let element"> 
+                        <input matInput [value]="element.description" [(ngModel)]="element.description" [ngModelOptions]="{standalone: true}">
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="edit">
                     <th mat-header-cell *matHeaderCellDef> </th>
                     <td mat-cell *matCellDef="let element">
-                        <button mat-raised-button color="accent" data-toggle="modal">Uredi</button>
-                        <button mat-raised-button class="deleteButton">Izbriši</button>
+                        <button mat-raised-button color="accent" type="button" (click)="editRegion(element)">Uredi</button>
+                        <button mat-raised-button class="deleteButton" (click)="deleteRegion(element)">Izbriši</button>
                     </td>
                 </ng-container>
 

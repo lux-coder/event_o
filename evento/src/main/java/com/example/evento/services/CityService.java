@@ -16,4 +16,8 @@ public interface CityService {
     List<CityDTO> getCities(String requestedCounties);
 
     void saveCity(Map<String, String> city);
+
+    void deleteCity(Map<String, String> requestedCity);
+
+    void editCity(Map<String, String> requestedCity);
 }

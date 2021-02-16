@@ -21,4 +21,8 @@ public interface EventService {
     List<String> searchEventsByName(String name);
 
     List<EventDTO> searchEventsByForm(EventRequest eventRequest);
+
+    void deleteEvent(Map<String, String> eventRequest);
+
+    void editEvent(Map<String, String> eventRequest);
 }

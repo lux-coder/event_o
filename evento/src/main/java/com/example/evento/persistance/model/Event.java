@@ -2,6 +2,7 @@ package com.example.evento.persistance.model;
 
 import lombok.Data;
 import lombok.NonNull;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

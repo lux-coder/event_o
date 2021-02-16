@@ -5,11 +5,11 @@ import com.example.evento.persistance.model.Event;
 import com.example.evento.persistance.model.dto.EventDTO;
 import com.example.evento.persistance.model.dto.EventRequest;
 import com.example.evento.services.EventService;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -63,9 +63,33 @@ public class EventsController {
     @PostMapping(value = "/search/event")
     public List<EventDTO> getSearchedEvents(@RequestBody EventRequest eventRequest) {
         LOGGER.info("In eventsController, getSearchedEvents with eventRequest: {}", eventRequest);
-
-
         return eventService.searchEventsByForm(eventRequest);
+    }
+
+    @PostMapping(value = "/delete" )
+    public ResponseEntity deleteEvent(@RequestBody Map<String, String> eventRequest) {
+        LOGGER.info("In eventsController, getSearchedEvents with eventRequest: {}", eventRequest);
+
+        try {
+            eventService.deleteEvent(eventRequest);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.info(e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/edit", consumes = "application/json;charset=UTF-8")
+    public ResponseEntity editEvent(@RequestBody Map<String, String> eventRequest){
+        LOGGER.info("In eventsController, editEvent: {}", eventRequest);
+
+        try {
+            eventService.editEvent(eventRequest);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.info(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,9 +42,16 @@ public class EventServiceImpl implements EventService {
     @Override
     public void save(Map<String, String> event) {
         LOGGER.info("In event service, save: {}", event);
-        eventRepository.saveEvent(event.get("event"), event.get("eventStartDate").replace("T", " "),
-                event.get("eventEndDate").replace("T", " "),
-                Boolean.valueOf(event.get("freeEntrance")), cityRepository.getCityId(event.get("cities$")));
+
+        if(event.get("eventEndDate") != null) {
+            eventRepository.saveEvent(event.get("event"), event.get("eventStartDate").replace("T", " "),
+                    event.get("eventEndDate").replace("T", " "),
+                    Boolean.valueOf(event.get("freeEntrance")), cityRepository.getCityId(event.get("cities$")));
+        }else {
+            eventRepository.saveEventWithoutEnd(event.get("event"), event.get("eventStartDate").replace("T", " "),
+                    Boolean.valueOf(event.get("freeEntrance")), cityRepository.getCityId(event.get("cities$")));
+        }
+        LOGGER.info("saved event");
     }
 
     @Override
@@ -80,14 +86,11 @@ public class EventServiceImpl implements EventService {
 
         if(eventRequest.getCity$() == null) {
             if(eventRequest.getCounty$() == null && eventRequest.getRegions$() != null) {
-                LOGGER.info("PRVI");
                 preview = getByRegion(eventRequest.getRegions$());
             } else if (eventRequest.getCounty$() != null) {
-                LOGGER.info("DRUGI");
                 preview = getByCounty(eventRequest.getCounty$());
             }
         } else if (eventRequest.getRegions$() == null && eventRequest.getCounty$() == null && eventRequest.getCity$() != null){
-            LOGGER.info("TRECI");
             preview = getByCity(eventRequest.getCity$());
         }
 
@@ -99,20 +102,20 @@ public class EventServiceImpl implements EventService {
 
         if (preview.isEmpty() && eventRequest.getEventStartDate() != null) {
             LOGGER.info("event start date: {}", eventRequest.getEventStartDate());
-            preview = eventRepository.getByStartDate(correctStartTimestamp(eventRequest.getEventStartDate()));
+            preview = eventRepository.getByStartDate(correctTimestamp(eventRequest.getEventStartDate()));
         }
 
         if (preview.isEmpty() && eventRequest.getEventStartDate() == null && eventRequest.getEventEndDate() != null) {
             LOGGER.info("event end date: {}", eventRequest.getEventEndDate());
-            String time = correctEndTimestamp(eventRequest.getEventEndDate());
+            String time = correctTimestamp(eventRequest.getEventEndDate());
             LOGGER.info("TIME END: {}", time);
             preview = eventRepository.getByEndDate(time);
         }
 
         if (preview.isEmpty() && eventRequest.getEventStartDate() != null && eventRequest.getEventEndDate() != null) {
             LOGGER.info("date between: {} - {}", eventRequest.getEventStartDate(), eventRequest.getEventEndDate());
-            preview = eventRepository.getByDateBetween(correctStartTimestamp(eventRequest.getEventStartDate()),
-                    correctEndTimestamp(eventRequest.getEventEndDate()));
+            preview = eventRepository.getByDateBetween(correctTimestamp(eventRequest.getEventStartDate()),
+                    correctTimestamp(eventRequest.getEventEndDate()));
         }
 
         if (preview.isEmpty() && eventRequest.getEntrance() != null) {
@@ -120,29 +123,24 @@ public class EventServiceImpl implements EventService {
             preview = eventRepository.getByEntrance(eventRequest.getEntrance());
         }
 
-
-
-        String name = "";
-        //String name = eventRequest.getEventName();
-        String eventStart = "";
-        //String eventStart = eventRequest.getEventStartDate().substring(0,10);
-        String eventEnd = "";
-        //String eventEnd = eventRequest.getEventEndDate().substring(0,10);
-        Boolean entrance = false;
-        //Boolean entrance = eventRequest.getEntrance();
-
-        /*if(city.length == 0 && regions.length == 0 ) {
-            preview = eventRepository.additionalFiltering(name, eventStart, eventEnd, entrance);
-        } else if (city.length == 0){
-            preview = eventRepository.findByRegion(regions);
-        } else if (regions.length == 0) {
-            preview = eventRepository.findByCity(city);
-        }
-*/
         LOGGER.info("EVENTS: {}", preview);
 
         return eventConverter.convertSpecific(preview);
-        //return null;
+    }
+
+    @Override
+    public void deleteEvent(Map<String, String> eventRequest) {
+        LOGGER.info("In eventService, deleteEvent: {}", eventRequest);
+        eventRepository.deleteById(eventRepository.getId(eventRequest.get("name")));
+        LOGGER.info("DELETED");
+    }
+
+    @Override
+    public void editEvent(Map<String, String> eventRequest) {
+        LOGGER.info("In eventService, editEvent: {}", eventRequest);
+        eventRepository.editEvent(eventRequest.get("name"), eventRequest.get("startTime"), eventRequest.get("endTime"),
+                Boolean.valueOf(eventRequest.get("freeEntrance")), cityRepository.getCityId(eventRequest.get("city")),
+                Long.valueOf(eventRequest.get("id")));
     }
 
     private List<Event> getByCity(List<String> city$) {
@@ -163,7 +161,7 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findByRegion(regions);
     }
 
-    private String correctStartTimestamp(String dateTime) {
+    private String correctTimestamp(String dateTime) {
         String time = dateTime.substring(0,11);
         String hour = dateTime.substring(11,13);
         String minute = dateTime.substring(14,16);
@@ -171,14 +169,4 @@ public class EventServiceImpl implements EventService {
         LOGGER.info("TIMESTAMP: {}", timestamp);
         return timestamp;
     }
-
-    private String correctEndTimestamp(String eventEndDate) {
-        String time = eventEndDate.substring(0,11);
-        String hour = eventEndDate.substring(11,13);
-        String minute = eventEndDate.substring(14,16);
-        String timestamp = time + (Integer.parseInt(hour) + 2) + ":" + minute + ":00.000Z";
-        LOGGER.info("TIMESTAMP: {}", timestamp);
-        return timestamp;
-    }
-
 }

@@ -24,4 +24,10 @@ public interface OrganizationalUnitService {
     void saveCounty(Map<String, String> requestCounty);
 
     void saveRegion(Map<String, String> requestRegion);
+
+    void deleteCounty(Map<String, String> requestedCounty);
+
+    void editRegion(Map<String, String> requestedCounty);
+
+    void editCounty(Map<String, String> requestedRegion);
 }

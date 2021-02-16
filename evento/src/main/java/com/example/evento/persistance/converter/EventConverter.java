@@ -44,6 +44,7 @@ public class EventConverter {
             Long cityId = event.getCity();
             City city = cityService.findById(cityId).orElseThrow(RuntimeException::new);
             CitySize citySize = citySizeService.findByCityId(cityId).orElseThrow(RuntimeException::new);
+            eventDTO.setId(event.getId());
             eventDTO.setCity(city.getName());
             eventDTO.setCitySize(citySize.getValue());
             eventDTO.setCityActive(citySize.getActive());
@@ -62,11 +63,9 @@ public class EventConverter {
 
     public List<EventDTO> convertSpecific(List<Event> eventsList) {
 
-        List<Event> events = eventsList;
-
         List<EventDTO> eventDTOList = new ArrayList<>();
 
-        for(Event event: events) {
+        for(Event event: eventsList) {
             EventDTO eventDTO = new EventDTO();
             Long cityId = event.getCity();
             City city = cityService.findById(cityId).orElseThrow(RuntimeException::new);

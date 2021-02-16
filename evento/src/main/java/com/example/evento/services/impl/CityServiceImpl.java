@@ -53,12 +53,6 @@ public class CityServiceImpl implements CityService {
         return cityDTOS;
     }
 
-/*    @Override
-    public List<City> getAllCities() {
-        LOGGER.info("In cityService, getAll");
-        return StreamSupport.stream(cityRepository.findAll().spliterator(), false).collect(Collectors.toList());
-    }*/
-
     @Override
     public List<CityDTO> getCities(String requestedCounties) {
         LOGGER.info("In CityService, getCities with requestedCounties:{}", requestedCounties);
@@ -84,4 +78,20 @@ public class CityServiceImpl implements CityService {
 
         citySizeRepository.save(citySize);
     }
+
+    @Override
+    public void deleteCity(Map<String, String> requestedCity) {
+        LOGGER.info("In CityService, deleteCity: {}", requestedCity);
+        cityRepository.deleteById(Long.valueOf(requestedCity.get("cityId")));
+    }
+
+    @Override
+    public void editCity(Map<String, String> requestedCity) {
+        LOGGER.info("In CityService, editCounty: {}", requestedCity);
+        cityRepository.editCity(requestedCity.get("cityName"), organizationalUnitRepository.getCountyId(requestedCity.get("organizationUnit")),
+                Long.valueOf(requestedCity.get("cityId")));
+        citySizeRepository.editCitySize(requestedCity.get("sizeValue"), !requestedCity.get("active").equals("Da"),
+                Long.valueOf(requestedCity.get("cityId")));
+    }
+
 }

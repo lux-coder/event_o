@@ -33,12 +33,25 @@ public interface OrganizationalUnitRepository extends CrudRepository<Organizatio
     @Query(value = "select unit_id from or_unit where unit_name = :county", nativeQuery = true)
     Long getCountyId(@Param("county") String county);
 
+    @Query(value = "select or_unit_id from or_unit where unit_name = :region", nativeQuery = true)
+    Long getRegionId(@Param("region") String region);
+
     @Transactional
     @Modifying
     @Query(value = "insert into or_unit(unit_name, unit_description, or_unit_id) values (:name, :description, " +
             "(select last_value from or_unit_unit_id_seq))", nativeQuery = true)
     void saveRegion(@Param("name") String name, @Param("description") String description);
 
-    @Query(value = "SELECT last_value from or_unit_unit_id_seq", nativeQuery = true)
+    @Query(value = "select last_value from or_unit_unit_id_seq", nativeQuery = true)
     Long getLastValue();
+
+    @Transactional
+    @Modifying
+    @Query(value = "update or_unit set unit_name = :name, unit_description = :description where unit_id = :id", nativeQuery = true)
+    void editRegion(@Param("name") String name, @Param("description") String description, @Param("id") Long id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update or_unit set unit_name = :name, unit_description = :description, or_unit_id = :unitId where unit_id = :id", nativeQuery = true)
+    void editCounty(@Param("name") String name, @Param("description") String description, @Param("unitId") Long unitId, @Param("id") Long id);
 }

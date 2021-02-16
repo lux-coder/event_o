@@ -9,6 +9,8 @@ CREATE TABLE or_unit(
     CONSTRAINT fk_unit
         FOREIGN KEY(or_unit_id)
         REFERENCES or_unit(unit_id)
+        ON DELETE CASCADE
+
 );
 
 CREATE TABLE or_type(
@@ -20,6 +22,8 @@ CREATE TABLE or_type(
 	CONSTRAINT fk_unit
 		FOREIGN KEY(unit_id)
 		REFERENCES or_unit(unit_id)
+		ON DELETE CASCADE
+
 );
 
 CREATE TABLE city(
@@ -30,6 +34,8 @@ CREATE TABLE city(
    CONSTRAINT fk_or_type
       FOREIGN KEY(or_unit_id)
       REFERENCES or_unit(unit_id)
+      ON DELETE CASCADE
+
 );
 
 CREATE TABLE city_size(
@@ -41,6 +47,7 @@ CREATE TABLE city_size(
    CONSTRAINT fk_city
 		FOREIGN KEY(city_id)
 		REFERENCES city(city_id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE events(
@@ -54,6 +61,8 @@ CREATE TABLE events(
    CONSTRAINT fk_city
         FOREIGN KEY(city_id)
         REFERENCES city(city_id)
+        ON DELETE CASCADE
+
 );
 
 

@@ -11,7 +11,6 @@ import { map, switchMap } from 'rxjs/operators';
 })
 export class AddService {
   
-
   private _reqOptionsArgs = { headers: new HttpHeaders().set('Content-Type', 'text/plain;charset=utf-8') };
   private _reqJSONOptionsArgs = { headers: new HttpHeaders().set('Content-Type', 'application/json;charset=utf-8') };
 
@@ -46,7 +45,6 @@ export class AddService {
   addEvent(value: any): Observable<any | HttpErrorResponse> {
     console.log("from addService, addEvent")
     let e = JSON.stringify(value);
-    console.log(e);
     return this.http.post<any>(this.host + '/events/save', e, this._reqJSONOptionsArgs);
   }  
 

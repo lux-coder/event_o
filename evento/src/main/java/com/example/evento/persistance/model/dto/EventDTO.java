@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 @Data
 public class EventDTO {
 
+    private Long id;
     private String name;
     private String startTime;
     private String endTime;

@@ -97,4 +97,25 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
 
         LOGGER.info("REGION SAVED!");
     }
+
+    @Override
+    public void deleteCounty(Map<String, String> requestedCounty) {
+        LOGGER.info("In OrganizationalUnitService, deleteCounty: {}", requestedCounty);
+        organizationalUnitRepository.deleteById(Long.valueOf(requestedCounty.get("id")));
+    }
+
+    @Override
+    public void editRegion(Map<String, String> requestedRegion) {
+        LOGGER.info("In OrganizationalUnitService, editRegion: {}", requestedRegion);
+        organizationalUnitRepository.editRegion(requestedRegion.get("name"), requestedRegion.get("description"),
+                Long.valueOf(requestedRegion.get("id")));
+    }
+
+    @Override
+    public void editCounty(Map<String, String> requestedRegion) {
+        LOGGER.info("In OrganizationalUnitService, editCounty: {}", requestedRegion);
+        organizationalUnitRepository.editCounty(requestedRegion.get("name"), requestedRegion.get("description"),
+                organizationalUnitRepository.getRegionId(requestedRegion.get("organizationalUnit")),
+                Long.valueOf(requestedRegion.get("id")));
+    }
 }

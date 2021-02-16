@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,9 @@ public interface EventRepository extends CrudRepository<Event, Long> {
             "inner join city_size on events.city_id = city_size.city_id " +
             "where city_size.active = true", nativeQuery = true)
     List<Event> findAllInActiveCity();
+
+    @Query(value = "select event_id from events where event_name = :name", nativeQuery = true)
+    Long getId(@Param("name") String name);
 
     @Query(value = "select event_name from events " +
             "where event_name like %:name%", nativeQuery = true)
@@ -69,11 +73,24 @@ public interface EventRepository extends CrudRepository<Event, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "insert into events(event_name, event_start, event_end, entrance, city_id) values (:event, " +
+    @Query(value = "insert into events (event_name, event_start, event_end, entrance, city_id) values (:event, " +
             "cast(:start as timestamp), cast(:end as timestamp), :entrance, :city)", nativeQuery = true)
     void saveEvent(@Param("event") String event, @Param("start") String start, @Param("end") String end, @Param("entrance")
             Boolean entrance, @Param("city") Long city);
 
+    @Transactional
+    @Modifying
+    @Query(value = "insert into events (event_name, event_start, entrance, city_id) values (:event, " +
+            "cast(:start as timestamp), :entrance, :city)", nativeQuery = true)
+    void saveEventWithoutEnd(@Param("event") String event, @Param("start") String start, @Param("entrance")
+            Boolean entrance, @Param("city") Long city);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update events set event_name = :name, event_start = cast(:start as timestamp), event_end = cast(:end as timestamp), " +
+            "entrance = :entrance, city_id = :city where event_id = :id", nativeQuery = true)
+    void editEvent(@Param("name") String name, @Param("start") String start, @Param("end") String end, @Param("entrance")
+            Boolean entrance, @Param("city") Long city, @Param("id") Long id);
 
     //List<Event> findByDateCreatedBetween(Timestamp start, Timestamp end);
 }
