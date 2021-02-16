@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/events")
@@ -47,9 +48,10 @@ public class EventsController {
     }
 
     @PostMapping(value = "/save")
-    public void create(@RequestBody Event event) {
+    public List<EventDTO> create(@RequestBody Map<String, String> event) {
         LOGGER.info("In eventsController, create with event: {}", event);
         eventService.save(event);
+        return eventConverter.convertEvent();
     }
 
     @GetMapping(value = "/search/{name}")

@@ -22,4 +22,7 @@ public interface CityRepository extends CrudRepository<City, Long> {
     //@Query(value = "SELECT NEW com.example.evento.persistance.model.dto.CityDTO(c.cityId, c.cityName, c.citySize) " +
     //        "from city as c inner join city_size as cs on c.city_id = cs.city_id", nativeQuery = true)
     List<Object[]> getAllCities();
+
+    @Query(value = "select city_id from city where city_name = :name", nativeQuery = true)
+    Long getCityId(@Param("name") String name);
 }

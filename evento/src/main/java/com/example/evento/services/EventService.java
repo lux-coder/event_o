@@ -5,13 +5,14 @@ import com.example.evento.persistance.model.dto.EventDTO;
 import com.example.evento.persistance.model.dto.EventRequest;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface EventService {
 
     Optional<Event> findById(Long id);
 
-    Event save(Event event);
+    void save(Map<String, String> event);
 
     List<Event> getAll();
 

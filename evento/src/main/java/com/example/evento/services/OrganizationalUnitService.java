@@ -4,6 +4,7 @@ import com.example.evento.persistance.model.OrganizationalUnit;
 import com.example.evento.persistance.model.dto.OrganizationDTO;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface OrganizationalUnitService {
@@ -20,4 +21,7 @@ public interface OrganizationalUnitService {
 
     List<OrganizationalUnit> getCounties(String requestedRegions);
 
+    void saveCounty(Map<String, String> requestCounty);
+
+    void saveRegion(Map<String, String> requestRegion);
 }

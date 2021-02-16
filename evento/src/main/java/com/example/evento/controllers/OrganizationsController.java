@@ -48,6 +48,14 @@ public class OrganizationsController {
         return organizationalUnitService.getRegions();
     }
 
+    @PostMapping(value = "/region/save", consumes = "application/json;charset=UTF-8")
+    public List<OrganizationalUnit> saveRegion(@RequestBody Map<String, String> requestRegion) {
+        LOGGER.info("In OrganizationsController, saveRegion: {}", requestRegion);
+        organizationalUnitService.saveRegion(requestRegion);
+
+        return organizationalUnitService.getRegions();
+    }
+
     @GetMapping(value = "/getCountiesFull")
     public List<OrganizationDTO> getCountiesFull() {
         LOGGER.info("In OrganizationsController, getCounties");
@@ -65,6 +73,14 @@ public class OrganizationsController {
         LOGGER.info("In OrganizationsController, getCounties");
         LOGGER.info("requestedRegions: {}", requestedRegions);
         return organizationalUnitService.getCounties(requestedRegions).stream().map(OrganizationalUnit::getName).collect(Collectors.toList());
+    }
+
+    @PostMapping(value = "/county/save", consumes = "application/json;charset=UTF-8")
+    public List<OrganizationDTO> saveCounty(@RequestBody Map<String, String> requestCounty) {
+        LOGGER.info("In OrganizationsController, saveCounty: {}", requestCounty);
+        organizationalUnitService.saveCounty(requestCounty);
+
+        return organizationalUnitService.getCountiesFull();
     }
 
     @PostMapping(value = "/city/save", consumes = "application/json;charset=UTF-8")

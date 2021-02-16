@@ -4,6 +4,7 @@ import com.example.evento.persistance.converter.EventConverter;
 import com.example.evento.persistance.model.Event;
 import com.example.evento.persistance.model.dto.EventDTO;
 import com.example.evento.persistance.model.dto.EventRequest;
+import com.example.evento.persistance.repository.CityRepository;
 import com.example.evento.persistance.repository.EventRepository;
 import com.example.evento.services.EventService;
 import org.slf4j.Logger;
@@ -11,8 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -26,6 +29,9 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private EventConverter eventConverter;
 
+    @Autowired
+    private CityRepository cityRepository;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(EventServiceImpl.class);
 
     @Override
@@ -35,9 +41,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event save(Event event) {
+    public void save(Map<String, String> event) {
         LOGGER.info("In event service, save: {}", event);
-        return eventRepository.save(event);
+        eventRepository.saveEvent(event.get("event"), event.get("eventStartDate").replace("T", " "),
+                event.get("eventEndDate").replace("T", " "),
+                Boolean.valueOf(event.get("freeEntrance")), cityRepository.getCityId(event.get("cities$")));
     }
 
     @Override

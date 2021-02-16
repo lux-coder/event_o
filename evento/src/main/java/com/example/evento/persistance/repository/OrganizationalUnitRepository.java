@@ -1,18 +1,15 @@
 package com.example.evento.persistance.repository;
 
 import com.example.evento.persistance.model.OrganizationalUnit;
-import com.example.evento.persistance.model.dto.OrganizationDTO;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.Arrays;
 import java.util.List;
 
 public interface OrganizationalUnitRepository extends CrudRepository<OrganizationalUnit, Long> {
-
-
 
     @Query(value = "select unit_name from or_unit where unit_id = ( " +
             "select or_unit_id from or_unit where unit_id = :countyId)", nativeQuery = true)
@@ -36,4 +33,12 @@ public interface OrganizationalUnitRepository extends CrudRepository<Organizatio
     @Query(value = "select unit_id from or_unit where unit_name = :county", nativeQuery = true)
     Long getCountyId(@Param("county") String county);
 
+    @Transactional
+    @Modifying
+    @Query(value = "insert into or_unit(unit_name, unit_description, or_unit_id) values (:name, :description, " +
+            "(select last_value from or_unit_unit_id_seq))", nativeQuery = true)
+    void saveRegion(@Param("name") String name, @Param("description") String description);
+
+    @Query(value = "SELECT last_value from or_unit_unit_id_seq", nativeQuery = true)
+    Long getLastValue();
 }

@@ -32,4 +32,14 @@ public class OrganizationalUnit {
         this.organizationalUnit = organizationalUnit;
     }
 
+    public OrganizationalUnit(String name, String description, Long organizationalUnit) {
+        this.name = name;
+        this.description = description;
+        this.organizationalUnit = organizationalUnit;
+    }
+
+    public OrganizationalUnit(String region, String description) {
+        this.name = region;
+        this.description = description;
+    }
 }

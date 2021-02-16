@@ -1,7 +1,9 @@
 package com.example.evento.services.impl;
 
+import com.example.evento.persistance.model.OrganizationalType;
 import com.example.evento.persistance.model.OrganizationalUnit;
 import com.example.evento.persistance.model.dto.OrganizationDTO;
+import com.example.evento.persistance.repository.OrganizationalTypeRepository;
 import com.example.evento.persistance.repository.OrganizationalUnitRepository;
 import com.example.evento.services.OrganizationalUnitService;
 import org.slf4j.Logger;
@@ -9,16 +11,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 public class OrganizationalUnitServiceImpl implements OrganizationalUnitService {
 
     @Autowired
     private OrganizationalUnitRepository organizationalUnitRepository;
+
+    @Autowired
+    private OrganizationalTypeRepository organizationalTypeRepository;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrganizationalUnitServiceImpl.class);
 
@@ -68,5 +71,30 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
         String[] regions = regionsList.toArray(new String[0]);
 
         return organizationalUnitRepository.getCounties(regions);
+    }
+
+    @Override
+    public void saveCounty(Map<String, String> requestCounty) {
+        LOGGER.info("In OrganizationalUnitService, saveCounty with requestCounty:{}", requestCounty);
+
+        OrganizationalUnit organizationalUnit = new OrganizationalUnit(requestCounty.get("county"), requestCounty.get("description"),
+                organizationalUnitRepository.getCountyId(requestCounty.get("regions$")));
+        organizationalUnit = organizationalUnitRepository.save(organizationalUnit);
+
+        organizationalTypeRepository.save(new OrganizationalType(requestCounty.get("regionType"), organizationalUnit.getId(), true));
+
+        LOGGER.info("COUNTY SAVED!");
+    }
+
+    @Override
+    public void saveRegion(Map<String, String> requestRegion) {
+        LOGGER.info("In OrganizationalUnitService, saveRegion with requestCounty:{}", requestRegion);
+
+        OrganizationalUnit organizationalUnit = new OrganizationalUnit(requestRegion.get("region"), requestRegion.get("description"));
+        organizationalUnitRepository.saveRegion(organizationalUnit.getName(), organizationalUnit.getDescription());
+
+        organizationalTypeRepository.save(new OrganizationalType(requestRegion.get("regionType"), organizationalUnitRepository.getLastValue(), true));
+
+        LOGGER.info("REGION SAVED!");
     }
 }

@@ -1,9 +1,11 @@
 package com.example.evento.persistance.repository;
 
 import com.example.evento.persistance.model.Event;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +66,13 @@ public interface EventRepository extends CrudRepository<Event, Long> {
 
     @Query(value = "select * from events where events.entrance = :entrance", nativeQuery = true)
     List<Event> getByEntrance(@Param("entrance") Boolean entrance);
+
+    @Transactional
+    @Modifying
+    @Query(value = "insert into events(event_name, event_start, event_end, entrance, city_id) values (:event, " +
+            "cast(:start as timestamp), cast(:end as timestamp), :entrance, :city)", nativeQuery = true)
+    void saveEvent(@Param("event") String event, @Param("start") String start, @Param("end") String end, @Param("entrance")
+            Boolean entrance, @Param("city") Long city);
 
 
     //List<Event> findByDateCreatedBetween(Timestamp start, Timestamp end);

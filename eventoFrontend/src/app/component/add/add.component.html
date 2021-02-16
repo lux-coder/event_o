@@ -1,7 +1,7 @@
 <div class="container">
 
     <div>
-        <form [formGroup]="addEventForm">
+        <form [formGroup]="addEventForm" (ngSubmit)="submitEvent()">
 
             <div class="addWrapper">
 
@@ -39,7 +39,7 @@
                     <textarea matInput hidden></textarea>
                 </mat-form-field>
 
-                <button mat-raised-button class="addButton" type="button" (click)="submitEvent()">Spremi</button>
+                <button mat-raised-button class="addButton" type="submit">Spremi</button>
 
             </div>
 
@@ -91,7 +91,7 @@
     <div class="container" style="height: 50px; background-color: white; width: 130%; margin-left: -15px;"></div>
 
     <div>
-        <form [formGroup]="addCityForm">
+        <form [formGroup]="addCityForm" (ngSubmit)="submitCity()">
 
             <div class="addWrapper">
 
@@ -124,7 +124,7 @@
                     <textarea matInput hidden></textarea>
                 </mat-form-field>
 
-                <button mat-raised-button class="addButton" type="button" (click)="submitCity()">Spremi</button>
+                <button mat-raised-button class="addButton" type="submit">Spremi</button>
 
             </div>
 
@@ -176,7 +176,7 @@
     <div class="container" style="height: 50px; background-color: white; width: 130%; margin-left: -15px;"></div>
 
     <div>
-        <form [formGroup]="addCountyForm">
+        <form [formGroup]="addCountyForm" (ngSubmit)="submitCounty()">
 
             <div class="addWrapper">
 
@@ -208,7 +208,7 @@
                     <input matInput type="text" [formControl]="addCountyForm.controls.description" placeholder="Opis">
                 </mat-form-field>
 
-                <button mat-raised-button class="addButton" type="button" (click)="submitCounty()">Spremi</button>
+                <button mat-raised-button class="addButton" type="submit" >Spremi</button>
 
             </div>
 
@@ -255,14 +255,14 @@
     <div class="container" style="height: 50px; background-color: white; width: 130%; margin-left: -15px;"></div>
 
     <div>
-        <form [formGroup]="addRegionForm">
+        <form [formGroup]="addRegionForm" (ngSubmit)="submitRegion()">
 
             <div class="addWrapper">
 
                 <mat-form-field>
                     <mat-label>Tip jedinice</mat-label>
                     <mat-select [formControl]="addRegionForm.controls.regionType">
-                        <mat-option *ngFor="let region of regionTypes" [value]="region.value"
+                        <mat-option *ngFor="let region of regionTypes" [value]="region.viewValue"
                             [disabled]="region.viewValue === 'ŽUPANIJA'">
                             {{region.viewValue}}
                         </mat-option>
@@ -278,7 +278,7 @@
                     <input matInput type="text" [formControl]="addRegionForm.controls.description" placeholder="Opis">
                 </mat-form-field>
 
-                <button mat-raised-button class="addButton" type="button" (click)="submitRegion()">Spremi</button>
+                <button mat-raised-button class="addButton" type="submit">Spremi</button>
 
             </div>
 

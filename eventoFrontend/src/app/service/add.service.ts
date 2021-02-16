@@ -43,19 +43,29 @@ export class AddService {
     return this.http.get<any>(this.host + '/events/getEvents', this._reqOptionsArgs);
   }
 
-  addEvent(any): void {
+  addEvent(value: any): Observable<any | HttpErrorResponse> {
     console.log("from addService, addEvent")
-    console.log(any);
-    let e = JSON.stringify(any);
+    let e = JSON.stringify(value);
     console.log(e);
-    this.http.post<any>(this.host + '/events/save', e, this._reqJSONOptionsArgs);
-    console.log("SENT");
+    return this.http.post<any>(this.host + '/events/save', e, this._reqJSONOptionsArgs);
   }  
 
   addCity(value: any): Observable<any | HttpErrorResponse> {
     console.log("from addService, addCity")    
     let e = JSON.stringify(value);
     return this.http.post<any>(this.host + '/organizations/city/save', e, this._reqJSONOptionsArgs );    
+  }
+
+  addCounty(value: any): Observable<any | HttpErrorResponse> {
+    console.log("from addService, addCounty")    
+    let e = JSON.stringify(value);
+    return this.http.post<any>(this.host + '/organizations/county/save', e, this._reqJSONOptionsArgs);    
+  }
+
+  addRegion(value: any): Observable<any | HttpErrorResponse> {
+    console.log("from addService, addRegion")    
+    let e = JSON.stringify(value);
+    return this.http.post<any>(this.host + '/organizations/region/save', e, this._reqJSONOptionsArgs);    
   }
 
 

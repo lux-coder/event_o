@@ -44,7 +44,7 @@ public class EventRepositoryIntegrationTest {
         CitySize newCitySize = new CitySize(randomAlphabetic(6), newCity.getId());
         assertNotNull(citySizeRepository.save(newCitySize));
 
-        Event newEvent = new Event(randomAlphabetic(20), Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()), newCity.getId());
+        Event newEvent = new Event(randomAlphabetic(20), String.valueOf(LocalDateTime.now()), String.valueOf(LocalDateTime.now()), newCity.getId());
         assertNotNull(eventRepository.save(newEvent));
     }
 }

@@ -84,27 +84,27 @@ export class AddComponent implements OnInit {
   cities$: Observable<City[]>;
 
   addRegionForm = new FormGroup({
-    regionType: new FormControl(),
-    region: new FormControl(),
+    regionType: new FormControl('', Validators.required),
+    region: new FormControl('', Validators.required),
     description: new FormControl()
   });
 
   addCountyForm = new FormGroup({
-    regionType: new FormControl(),
-    regions$: new FormControl(),
-    county: new FormControl(),
+    regionType: new FormControl('ŽUPANIJA',Validators.required),
+    regions$: new FormControl('', Validators.required),
+    county: new FormControl('', Validators.required),
     description: new FormControl()
   });
 
   addCityForm = new FormGroup({
-    counties$: new FormControl(Validators.required),
+    counties$: new FormControl('',Validators.required),
     city: new FormControl('', Validators.required),
-    size: new FormControl(Validators.required),
+    size: new FormControl('',Validators.required),
     active: new FormControl(null ? false : true)
   });
 
   addEventForm = new FormGroup({
-    cities$: new FormControl(),
+    cities$: new FormControl('', Validators.required),
     event: new FormControl('',Validators.required),
     eventStartDate: new FormControl(Validators.required),
     eventEndDate: new FormControl(),
@@ -149,37 +149,78 @@ export class AddComponent implements OnInit {
   }
 
   submitEvent() {
-    console.log("submit event");
-      if(this.addEventForm.valid){
-        console.log(this.addEventForm.value);
-        this.addService.addEvent(this.addEventForm.value);
-        this.addEventForm.reset();
-      } else {
-        console.log("no valid");
-      }
+    console.log("submit event");    
+    if (this.addEventForm.valid) {
+      this.addService.addEvent(this.addEventForm.value).subscribe(res => {        
+        this.dataEvent = res;                
+        this.dataSourceEvents = new MatTableDataSource(this.dataEvent);
+        this.dataSourceEvents.paginator = this.paginator.toArray()[0];
+        this.dataSourceEvents.sort = this.sort.toArray()[0];        
+        this.addEventForm.reset();        
+        Object.keys(this.addEventForm.controls).forEach(key => {
+          this.addEventForm.controls[key].setErrors(null)
+        });
+      });    
+    } else {
+      console.log("Form addCityForm not valid!!")
+    }
     
   }
 
   submitCity() {
     console.log("submit city");    
-    this.addService.addCity(this.addCityForm.value).subscribe(res => {
-      this.addService.setData(res);
-      this.dataCity = res;
-      console.log("before table");
-      console.log(this.dataCity);
-      this.dataSourceCities = new MatTableDataSource(this.dataCity);
-      this.dataSourceCities.paginator = this.paginator.toArray()[1];
-      this.dataSourceCities.sort = this.sort.toArray()[1];
-    });    
-    this.addCityForm.reset();
+    if (this.addCityForm.valid) {
+      this.addService.addCity(this.addCityForm.value).subscribe(res => {        
+        this.dataCity = res;                
+        this.dataSourceCities = new MatTableDataSource(this.dataCity);
+        this.dataSourceCities.paginator = this.paginator.toArray()[1];
+        this.dataSourceCities.sort = this.sort.toArray()[1];        
+        this.addCityForm.reset();        
+        Object.keys(this.addCityForm.controls).forEach(key => {
+          this.addCityForm.controls[key].setErrors(null)
+        });
+      });    
+    } else {
+      console.log("Form addCityForm not valid!!")
+    }
   }
 
   submitCounty() {
     console.log("submit county");
+    console.log(this.addCountyForm.value);
+    if (this.addCountyForm.valid) {
+      this.addService.addCounty(this.addCountyForm.value).subscribe(res => {        
+        this.dataCounty = res;                
+        this.dataSourceCounties = new MatTableDataSource(this.dataCounty);
+        this.dataSourceCounties.paginator = this.paginator.toArray()[2];
+        this.dataSourceCounties.sort = this.sort.toArray()[2];        
+        this.addCountyForm.reset();        
+        Object.keys(this.addCountyForm.controls).forEach(key => {
+          this.addCountyForm.controls[key].setErrors(null)
+        });
+      });    
+    } else {
+      console.log("Form addCountyForm not valid!!")
+    }
   }
 
   submitRegion() {
     console.log("submit region");
+    console.log(this.addRegionForm.value);
+    if (this.addRegionForm.valid) {
+      this.addService.addRegion(this.addRegionForm.value).subscribe(res => {        
+        this.dataRegion = res;                
+        this.dataSourceRegions = new MatTableDataSource(this.dataRegion);
+        this.dataSourceRegions.paginator = this.paginator.toArray()[3];
+        this.dataSourceRegions.sort = this.sort.toArray()[3];        
+        this.addRegionForm.reset();        
+        Object.keys(this.addRegionForm.controls).forEach(key => {
+          this.addRegionForm.controls[key].setErrors(null)
+        });
+      });    
+    } else {
+      console.log("Form addRegionForm not valid!!")
+    }
   }
 
 }

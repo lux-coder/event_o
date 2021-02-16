@@ -29,4 +29,10 @@ public class OrganizationalType {
         this.name = name;
         this.unit = unitId;
     }
+
+    public OrganizationalType(String name, Long unitId, Boolean active) {
+        this.name = name;
+        this.unit = unitId;
+        this.active = active;
+    }
 }

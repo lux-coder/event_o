@@ -8,8 +8,8 @@ import java.sql.Timestamp;
 public class EventDTO {
 
     private String name;
-    private Timestamp startTime;
-    private Timestamp endTime;
+    private String startTime;
+    private String endTime;
     private Boolean freeEntrance;
     private String city;
     private String citySize;
