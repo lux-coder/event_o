@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class CityServiceImpl implements CityService {
@@ -46,9 +45,7 @@ public class CityServiceImpl implements CityService {
 
         List<CityDTO> cityDTOS = cityConverter.convertCity(cityRepository.getAllCities());
 
-        for (CityDTO c: cityDTOS) {
-            c.setOrganizationUnit(organizationalUnitRepository.getCountyName(c.getOrUnitId().longValue()));
-        }
+        cityDTOS.forEach(c -> c.setOrganizationUnit(organizationalUnitRepository.getCountyName(c.getOrUnitId().longValue())));
 
         return cityDTOS;
     }
@@ -92,6 +89,28 @@ public class CityServiceImpl implements CityService {
                 Long.valueOf(requestedCity.get("cityId")));
         citySizeRepository.editCitySize(requestedCity.get("sizeValue"), !requestedCity.get("active").equals("Da"),
                 Long.valueOf(requestedCity.get("cityId")));
+    }
+
+    @Override
+    public List<CityDTO> getCitiesBySize(String size) {
+        LOGGER.info("In CityService, getCitiesBySize");
+
+        return cityRepository.getCityBySize(size).stream()
+                .map(city -> new CityDTO((Integer)city[0], (String)city[1], (String)city[2]))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CityDTO> getCitiesSorted(String requestedCounties, String size) {
+        LOGGER.info("In CityService, getCitiesSorted with requestedCounties:{}", requestedCounties);
+
+        String countiesReq = requestedCounties.substring(1, requestedCounties.length()-1).replaceAll("\"", "");
+        List<String> countiesList = new ArrayList<>(Arrays.asList(countiesReq.split(",")));
+        String[] counties = countiesList.toArray(new String[0]);
+
+        return cityRepository.getCitiesSorted(counties, size).stream()
+                .map(city -> new CityDTO((Integer)city[0], (String)city[1], (String)city[2])).collect(Collectors.toList());
+
     }
 
 }

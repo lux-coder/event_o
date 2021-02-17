@@ -62,7 +62,6 @@ CREATE TABLE events(
         FOREIGN KEY(city_id)
         REFERENCES city(city_id)
         ON DELETE CASCADE
-
 );
 
 

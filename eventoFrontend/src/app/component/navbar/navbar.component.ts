@@ -1,18 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective } from '@angular/forms';
-import { NgSelectConfig, NgSelectModule } from '@ng-select/ng-select';
-import { FormsModule } from '@angular/forms';
+import { NgSelectConfig } from '@ng-select/ng-select';
 import { Observable } from 'rxjs';
 import { UnitsService } from 'src/app/service/units.service';
 import { Region } from 'src/app/model/region';
 import { City } from 'src/app/model/city';
 import { County } from 'src/app/model/county';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { Events } from 'src/app/model/events';
 
 interface Entrance {
   value: number;
   viewValue: string;
+}
+
+interface CitySize {
+  value: string;
 }
 
 @Component({
@@ -26,6 +28,12 @@ export class NavbarComponent implements OnInit {
   entrance: Entrance[] = [
     { value: 1, viewValue: "DA"},
     { value: 2, viewValue: "NE" }
+  ];
+
+  citySize: CitySize[] = [
+    { value: "MALI" },
+    { value: "SREDNJI" },
+    { value: "VELIK" }
   ];
 
   @ViewChild(FormGroupDirective, { static: false }) searchEvents;
@@ -97,11 +105,19 @@ export class NavbarComponent implements OnInit {
 
   clearForm() {
     console.log("cleared")
-    //window.location.reload()
     this.searchEvents.resetForm();
-    this.ngOnInit();
-    
+    this.ngOnInit();    
+  }  
+
+  onChangeSize(value) {    
+    console.log(value);
+    if(value == undefined) {
+      this.city$ = this.unitsService.getAllCities();
+    } else if (this.selectedCounties != null) {
+      this.city$ = this.unitsService.getCitiesSorted(value, this.selectedCounties);
+    } else {
+      this.city$ = this.unitsService.getCitiesBySize(value);
+    }    
   }
 
-  
 }

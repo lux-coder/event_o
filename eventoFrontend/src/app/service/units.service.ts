@@ -2,7 +2,6 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { ServerConstant } from '../constant/server-constant';
-import { City } from '../model/city';
 import { Events } from '../model/events';
 import { Region } from '../model/region';
 
@@ -10,7 +9,7 @@ import { Region } from '../model/region';
   providedIn: 'root'
 })
 export class UnitsService {
-
+    
   private apiData = new BehaviorSubject<any[]>(null);
   public apiData$ = this.apiData.asObservable();
 
@@ -50,6 +49,16 @@ export class UnitsService {
     return this.http.post<any>(this.host + '/organizations/getCities', selectedCounties, this._reqOptionsArgs);
   }
 
+  getCitiesSorted(value: any, selectedCounties: any): Observable<any | HttpErrorResponse> {
+    console.log("from unitsService, getCitiesSorted onChange");   
+    return this.http.post<any>(this.host + '/organizations/getCitiesSorted/' + value, selectedCounties, this._reqOptionsArgs);
+  }
+
+  getCitiesBySize(value: any): Observable<any | HttpErrorResponse> {
+    console.log("from unitsService, getCitiesBySize onChange");    
+    return this.http.get<any>(this.host + '/organizations/getCitiesBySize/' + value, this._reqOptionsArgs);
+  }
+
   searchEventName(name: string): Observable<Event[]> {
     if(!name) {
       return of([]);
@@ -61,8 +70,7 @@ export class UnitsService {
     console.log("from unitsService, searchEvents")
     let e = JSON.stringify(event);
     return this.http.post<any>(this.host + '/events/search/event', e, this._reqJSONOptionsArgs);
-  }  
-  
+  }    
 
   setData(data) { 
     console.log("settingData service");    

@@ -92,6 +92,8 @@ public class EventServiceImpl implements EventService {
             }
         } else if (eventRequest.getRegions$() == null && eventRequest.getCounty$() == null && eventRequest.getCity$() != null){
             preview = getByCity(eventRequest.getCity$());
+        } else if (eventRequest.getRegions$() == null && eventRequest.getCounty$() != null && eventRequest.getCity$() != null) {
+            preview = getByCity(eventRequest.getCity$());
         }
 
 

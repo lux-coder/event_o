@@ -1,13 +1,15 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">  
   <a class="navbar-brand text-light" href="#">EventO app is running!</a>
 
+  <button mat-raised-button routerLink="/add" style="background-color: #008080;">Dodaj/Promijeni</button>
+
   <span class="login" style="display:inline-block;">    
       <a routerLink="/login">Login
         <mat-icon>login</mat-icon>
       </a>
   </span>
   <span>
-    <a *ngIf="loginService.isUserLoggedIn()" routerLink="/logout" class="nav-link">LogOut</a>
+    <a routerLink="/logout" class="nav-link">LogOut</a>
   </span>
 </nav>
 

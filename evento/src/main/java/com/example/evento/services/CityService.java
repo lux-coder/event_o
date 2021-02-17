@@ -20,4 +20,9 @@ public interface CityService {
     void deleteCity(Map<String, String> requestedCity);
 
     void editCity(Map<String, String> requestedCity);
+
+    List<CityDTO> getCitiesBySize(String size);
+
+    List<CityDTO> getCitiesSorted(String requestedCounties, String size);
+
 }

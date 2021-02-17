@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/organizations")
 public class OrganizationsController {
 
@@ -87,8 +88,6 @@ public class OrganizationsController {
     public List<CityDTO> saveCity(@RequestBody Map<String, String> requestCity) {
         LOGGER.info("In OrganizationsController, saveCity: {}", requestCity);
         cityService.saveCity(requestCity);
-
-        LOGGER.info("SAVEEEED!!!!");
         return cityService.getAllCities();
     }
 
@@ -98,14 +97,22 @@ public class OrganizationsController {
         return cityService.getAllCities();
     }
 
+    @GetMapping(value = "/getCitiesBySize/{size}")
+    public List<CityDTO> getCitiesBySize(@PathVariable String size) {
+        LOGGER.info("In OrganizationsController, getCitiesBySize");
+        return cityService.getCitiesBySize(size);
+    }
+
     @PostMapping(value = "/getCities", consumes = "text/plain;charset=UTF-8")
     public List<CityDTO> getCities(@RequestBody String requestedCounties) {
         LOGGER.info("In OrganizationsController, getACities");
+        return cityService.getCities(requestedCounties);
+    }
 
-        List<CityDTO> cityDTOS = cityService.getCities(requestedCounties);
-        cityDTOS.forEach(c -> LOGGER.info(c.toString()));
-
-        return cityDTOS;
+    @PostMapping(value = "/getCitiesSorted/{size}", consumes = "text/plain;charset=UTF-8")
+    public List<CityDTO> getCitiesSorted(@PathVariable String size, @RequestBody String requestedCounties) {
+        LOGGER.info("In OrganizationsController, getCitiesSorted: {}", requestedCounties);
+        return cityService.getCitiesSorted(requestedCounties, size);
     }
 
     @PostMapping(value = "/deleteCity", consumes = "application/json;charset=UTF-8")
